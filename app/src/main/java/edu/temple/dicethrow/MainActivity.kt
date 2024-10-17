@@ -1,14 +1,29 @@
 package edu.temple.dicethrow
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.os.Bundle
+import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Display generated number using this TextView
+        val numberDisplay = findViewById<TextView>(R.id.numberDisplay)
+
+        // Retrieve ViewModel
+        val viewModel = ViewModelProvider(this)[DiceViewModel::class.java]
+
+        viewModel.getselectednum().observe(this){
+            numberDisplay.text = it.toString()
+        }
+
+        // Fragment created using factory method and added dynamically using fragmentTransaction
+        // argument is the number of sides the die will have
+        supportFragmentManager.beginTransaction()
+            .add(R.id.diceFragmentContainer, DiceFragment.newInstance(6))
+            .commit()
     }
 }
